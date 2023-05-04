@@ -15,6 +15,8 @@ class Category(models.Model):
         return self.name
 
 class Product(models.Model):
+    
+    category = models.ForeignKey(Category, related_name='product', on_delete=models.CASCADE, null=True)
 
     title = models.CharField(max_length=250)
 
@@ -24,7 +26,7 @@ class Product(models.Model):
 
     slug = models.SlugField(max_length=255)
 
-    price = models.DecimalField(max_digits=4, decimal_places=2)
+    price = models.IntegerField()
 
     image = models.ImageField(upload_to='images/')
 
