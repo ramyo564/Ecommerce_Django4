@@ -1,10 +1,11 @@
 from django.db import models
+from django.utils.text import slugify
 
 # Create your models here.
 class Category(models.Model):
 
     name = models.CharField(max_length=250, db_index=True)
-    slug = models.SlugField(max_length=250, unique=True)
+    slug = models.SlugField(max_length=250, unique=True, allow_unicode=True)
 
     class Meta:
 
@@ -24,7 +25,7 @@ class Product(models.Model):
 
     description = models.TextField(blank=True)
 
-    slug = models.SlugField(max_length=255)
+    slug = models.SlugField(max_length=255, allow_unicode=True)
 
     price = models.IntegerField()
 
