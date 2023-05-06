@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     
     'django.contrib.humanize', # 숫자 포멧
     'store', # Django app
+    'cart', # Django app
 ]
 
 MIDDLEWARE = [
