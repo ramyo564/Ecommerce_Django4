@@ -2,7 +2,7 @@
 {% extends "./base.html" %}
 
 {% load static %}
-
+{% load humanize %}
 {% block content %}
 
 <div class="container">
@@ -36,6 +36,7 @@
 
 
                 <p>
+
                     {{ product.description }}
                     <!-- Product description -->
                 </p>
@@ -50,7 +51,7 @@
 
                             <div class="col-6 text-end">                  
                                 <span class="h4 fw-bold">₩
-                                {{ product.price }}
+                                {{ product.price|intcomma}}
                                 <!-- Product price -->
                               </span>
                             </div>
@@ -74,9 +75,9 @@
                                         <input type='button'
                                         onclick='count("minus")'
                                         value='-'  class="form-control"/>
-                                        &nbsp;
+                                        &nbsp;&nbsp;
                                         <div id='result' class="form-control">0</div>
-                                        &nbsp;
+                                        &nbsp;&nbsp;
                                         <input type='button'
                                         onclick='count("plus")'
                                         value='+' class="form-control"/>
