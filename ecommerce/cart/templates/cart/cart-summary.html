@@ -165,7 +165,7 @@
   
       success: function (json) {
   
-        location.reload(); // refresh current page
+        location.reload(true); // refresh current page
   
         document.getElementById("cart-qty").textContent = json.qty // need to be matched with JsonResponse dictionary key in cart_add function from view.py
       
@@ -204,7 +204,7 @@
   
       success: function (json) {
         
-        location.reload(); // refresh current page
+        location.reload(true); // refresh current page
   
         document.getElementById("cart-qty").textContent = json.qty // need to be matched with JsonResponse dictionary key in cart_add function from view.py
       
