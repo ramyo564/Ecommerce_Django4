@@ -41,8 +41,15 @@ INSTALLED_APPS = [
     'django.contrib.humanize', # 숫자 포멧
     'store', # Django app
     'cart', # Django app
+    'account', # Django app
     'mathfilters', # 숫자 계산 필터
+    'crispy_forms', # register 폼 펄터
+    "crispy_bootstrap4",
 ]
+
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
