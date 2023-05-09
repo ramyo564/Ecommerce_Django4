@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize', # 숫자 포멧
     'store', # Django app
     'cart', # Django app
+    'mathfilters', # 숫자 계산 필터
 ]
 
 MIDDLEWARE = [
@@ -67,6 +68,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'store.views.categories',
+                'cart.context_processors.cart',
             ],
         },
     },

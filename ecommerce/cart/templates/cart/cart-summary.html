@@ -1,6 +1,6 @@
 {% include "store/base.html" %}
-
-
+{% load humanize %}
+{% load mathfilters %}
 {% load static %}
 
 
@@ -13,24 +13,26 @@
       
       <h1 class="h5"> Shopping cart </h1>
 
-	<hr>
-      
+    <hr>
+    {% for item in cart %}
+
+    {% with product=item.product %}
       <br>
 
       <div class="row mb-4 border product-item">
         
         <div class="col-md-3 col-lg-2 order-md-first bg-light">
         
-            <img class="img-fluid mx-auto d-block" width="200px" alt="Responsive image" src=""> <!-- Product image -->
+            <img class="img-fluid mx-auto d-block" width="200px" alt="Responsive image" src="{{product.image.url}}"> <!-- Product image -->
         
         </div>
 
         
         <div class="col-md-9 col-lg-10 ps-md-3 ps-lg-10">
           
-          <a href="" class="text-decoration-none text-reset"> <!-- Product get absolute url -->
+          <a href="{{product.get_absolute_url}}" class="text-decoration-none text-reset"> <!-- Product get absolute url -->
           
-            <h1 class="h5 pt-2"> <!-- Product title --> </h1>
+            <h1 class="h5 pt-2"> {{product.title}}<!-- Product title --> </h1>
           
           </a>
           
@@ -42,7 +44,7 @@
               
                 <div class="col-6"> Product </div>
               
-                <div class="col-6 text-end"><span class="h6 fw-bold">₩ <!-- Product price --> </span></div>
+                <div class="col-6 text-end"><span class="h6 fw-bold">₩  {{product.price|mul:item.qty|intcomma}}<!-- Product price --> </span></div>
             
               </div>
             
@@ -58,23 +60,17 @@
 
                   &nbsp; 
                   
-                  <select id="">
-                  
-                    <option selected>
-                  
-                        {{item.qty}}
-                  
-                    </option>
-                  
-                    <option value="">1</option>
-                  
-                    <option value="">2</option>
-                  
-                    <option value="">3</option>
-                  
-                    <option value="">4</option>
-                  
-                  </select>
+                  <div class="col-sm-10" style="text-align: center; width: 10px; display:flex; ">
+                    <input type='button'
+                    onclick='count("minus")'
+                    value='-'  class="form-control"/>
+                    &nbsp;&nbsp;
+                    <div id='result' class="form-control" style="width: 100px;">{{item.qty}}</div>
+                    &nbsp;&nbsp;
+                    <input type='button'
+                    onclick='count("plus")'
+                    value='+' class="form-control"/>
+                </div>
                   
                   <br> <br>
 
@@ -105,11 +101,18 @@
       
     </div>
       
+    {% endwith %}
 
+    {% endfor %}
 
       <div class="col-12 text-end">
  
-        <div class="h6 fw-bold"> Sub total: ₩ <div id="subtotal" class="d-inline-flex"> <!-- cart.get_total --> </div></div>
+        <div class="h6 fw-bold"> Sub total: ₩ <div id="subtotal" class="d-inline-flex"> 
+          <!-- cart.get_total --> 
+          {{cart.get_total|intcomma}}
+        </div>
+      
+      </div>
  
       </div>
  
@@ -119,7 +122,33 @@
 
  </main>
 
+<script>
 
+    // 장바구니 + - 기능
+    function count(type)  {
+      // 결과를 표시할 element
+      const resultElement = document.getElementById('result');
+      
+      // 현재 화면에 표시된 값
+      let number = resultElement.innerText;
+
+      // 더하기/빼기
+      if(type === 'plus') {
+          number = parseInt(number) + 1;
+      }else if(type === 'minus')  {
+          number = parseInt(number) - 1;
+      }
+      
+      // 결과 출력
+      if(number > 0){
+          resultElement.innerText = number;
+      }
+      
+    }
+
+
+
+</script>
 
 {% endblock %}
 

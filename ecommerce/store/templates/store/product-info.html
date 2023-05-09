@@ -51,7 +51,7 @@
 
                             <div class="col-6 text-end">                  
                                 <span class="h4 fw-bold">₩
-                                {{ product.price|intcomma}}
+                                {{ product.price|intcomma }}
                                 <!-- Product price -->
                               </span>
                             </div>
@@ -76,7 +76,7 @@
                                         onclick='count("minus")'
                                         value='-'  class="form-control"/>
                                         &nbsp;&nbsp;
-                                        <div id='result' class="form-control">0</div>
+                                        <div id='result' class="form-control" style="width: 100px;">1</div>
                                         &nbsp;&nbsp;
                                         <input type='button'
                                         onclick='count("plus")'
@@ -87,7 +87,7 @@
 
                             <div class="col-6 text-end">
                                 
-                                <button type="button" id="add-button" value="" class="btn btn-secondary btn-sm">
+                                <button type="button" id="add-button" value="{{product.id}}" class="btn btn-secondary btn-sm">
                         
                                 Add to cart 
                             
@@ -112,6 +112,8 @@
 
 </div>
 <script>
+
+    // 장바구니 + - 기능
     function count(type)  {
         // 결과를 표시할 element
         const resultElement = document.getElementById('result');
@@ -127,10 +129,42 @@
         }
         
         // 결과 출력
-        if(number > -1){
+        if(number > 0){
             resultElement.innerText = number;
         }
         
       }
+
+    // Add button
+
+    $(document).on('click', '#add-button', function (e) {
+
+        e.preventDefault();
+  
+        $.ajax({
+  
+          type: 'POST',
+          url: '{% url "cart-add" %}',
+          data: {
+  
+            product_id: $('#add-button').val(),
+            product_quantity: $('#result').text(),
+            csrfmiddlewaretoken: "{{csrf_token}}",
+            action: 'post' 
+        },
+  
+        success: function (json) {
+  
+          
+          document
+            .getElementById("cart-qty")
+            .textContent = json.qty // need to be matched with JsonResponse dictionary key in cart_add function from view.py
+        },
+  
+        error: function (xhr, errmsg, err) {}
+  
+      });
+  
+    })
 </script>
 {% endblock %}

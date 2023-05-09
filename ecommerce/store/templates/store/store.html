@@ -1,6 +1,6 @@
 
 {% extends "./base.html" %}
-
+{% load humanize %}
 {% load static %}
 
 
@@ -60,7 +60,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                   <h5>
                     ₩
-                    {{product.price}}
+                    {{product.price|intcomma}}
                   </h5>
                 </div>
               </div>
