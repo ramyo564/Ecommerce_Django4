@@ -3,14 +3,17 @@ from django.http import HttpResponse
 from .forms import CreateUserForm, LoginForm, UpdateUserForm
 
 from django.contrib.sites.shortcuts import get_current_site
-from django.contrib.auth.models import User
+from .token import user_tokenizer_generate
 
 from django.template.loader import render_to_string
 from django.utils.encoding import force_str ,force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
+
+from django.contrib.auth.models import User
 from django.contrib.auth.models import auth
 from django.contrib.auth import authenticate
+
 
 from django.contrib.auth.decorators import login_required
 
@@ -31,32 +34,26 @@ def register(request):
 
         if form.is_valid():
 
-            # after using token pakage, it's useless #
-            form.save()
-            return redirect('store')
+            user = form.save()
+            user.is_active = False
+            user.save()
+            
+            # Email verification setup (template)
 
-    #         user = form.save()
-    #         user.is_active = False
-    #         user.save()
+            current_site = get_current_site(request)
+            subject = 'Account verification email'
+            message = render_to_string('account/registration/email-verification.html', {
 
-    #         # Email verification setup (template)
+                'user' : user,
+                'domain' : current_site.domain,
+                'uid' : urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': user_tokenizer_generate.make_token(user),
 
-    #         current_site = get_current_site(request)
+            })
 
-    #         subject = 'Account verification email'
+            user.email_user(subject=subject, message=message)
 
-    #         message = render_to_string('account/registration/email-verification.html', {
-
-    #             'user' : user,
-    #             'domain' : current_site.domain,
-    #             'uid' : urlsafe_base64_encode(force_bytes(user.pk)),
-    #             'token': user_tokenizer_generate.make_token(user),
-
-    #         })
-
-    #         user.email_user(subject=subject, message=message)
-
-    #         return redirect('email-verification-sent')
+            return redirect('email-verification-sent')
 
 
     context = {'form':form}
@@ -65,41 +62,40 @@ def register(request):
 
 
 
-# def email_verification(request, uidb64, token):
-
-#     # unique_id
+def email_verification(request, uidb64, token):
+    # unique_id
     
-#     unique_id = force_str(urlsafe_base64_decode(uidb64))
-#     user = User.objects.get(pk=unique_id)
+    unique_id = force_str(urlsafe_base64_decode(uidb64))
+    user = User.objects.get(pk=unique_id)
 
-#     # success
+    # success
 
-#     if user and user_tokenizer_generate.check_token(user, token):
-#         user.is_active = True
-#         user.save()
+    if user and user_tokenizer_generate.check_token(user, token):
+        
+        user.is_active = True
+        user.save()
 
-#         return redirect('email-verification-success')
+        return redirect('email-verification-success')
+
+    # failed
+    
+    else:
+
+        return redirect('email-verification-failed')
 
 
-#     # failed
 
-#     else:
+def email_verification_sent(request):
 
-#         return redirect('email-verification-failed')
+    return render (request,'account/registration/email-verification-sent.html')
 
+def email_verification_success(request):
 
+    return render (request,'account/registration/email-verification-success.html')
 
-# def email_verification_sent(request):
+def email_verification_failed(request):
 
-#     return render (request,'account/registration/email-verification-sent.html')
-
-# def email_verification_success(request):
-
-#     return render (request,'account/registration/email-verification-success.html')
-
-# def email_verification_failed(request):
-
-#     return render (request,'account/registration/email-verification-failed.html')
+    return render (request,'account/registration/email-verification-failed.html')
 
 
 # # Login

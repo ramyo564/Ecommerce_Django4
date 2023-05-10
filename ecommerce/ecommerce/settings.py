@@ -12,8 +12,32 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 
+import json
+import os
+from pathlib import Path
+from django.core.exceptions import ImproperlyConfigured
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Secret_KEY
+secret_file = os.path.join(BASE_DIR, 'secrets.json')
+with open(secret_file) as f:
+    secrets = json.loads(f.read())
+
+def get_secret(setting, secrets=secrets):
+    try:
+        return secrets[setting]
+    except KeyError:
+        error_msg = "Set the {} environment variable".format(setting)
+        raise ImproperlyConfigured(error_msg)
+
+MY_EMAIL = get_secret("MY_EMAIL")
+EMAIL_PASSWORD = get_secret("EMAIL_PASSWORD")
+
+
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -139,3 +163,12 @@ MEDIA_ROOT = BASE_DIR / 'static/media'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Email configuration settings:
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = MY_EMAIL
+EMAIL_HOST_PASSWORD = EMAIL_PASSWORD
+EMAIL_PORT = '587'
+EMAIL_USE_TLS = 'True'
