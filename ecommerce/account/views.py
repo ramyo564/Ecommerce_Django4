@@ -9,10 +9,10 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_str ,force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
-
 from django.contrib.auth.models import User
+
 from django.contrib.auth.models import auth
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login, logout
 
 
 from django.contrib.auth.decorators import login_required
@@ -52,7 +52,7 @@ def register(request):
             })
 
             user.email_user(subject=subject, message=message)
-
+            print(user.email_user)
             return redirect('email-verification-sent')
 
 
@@ -98,106 +98,107 @@ def email_verification_failed(request):
     return render (request,'account/registration/email-verification-failed.html')
 
 
-# # Login
+# Login
 
-# def my_login(request):
+def my_login(request):
 
-#     form = LoginForm()
+    form = LoginForm()
 
-#     if request.method == 'POST':
+    if request.method == 'POST':
 
-#         form = LoginForm(request, data=request.POST)
+        form = LoginForm(request, data=request.POST)
 
-#         if form.is_valid():
+        if form.is_valid():
 
-#             username = request.POST.get('username')
-#             password = request.POST.get('password')
+            username = request.POST.get('username')
+            password = request.POST.get('password')
 
-#             user = authenticate(request, username=username, password=password)
+            user = authenticate(request, username=username, password=password)
 
-#             if user is not None:
+            if user is not None:
 
-#                 auth.login(request, user)
+                auth.login(request, user)
 
-#                 return redirect("dashboard")
+                return redirect("dashboard")
+         
 
-#     context = {'form':form}
+    context = {'form':form}
 
-#     return render(request, 'account/my-login.html', context=context)
+    return render(request, 'account/my-login.html', context=context)
 
-# # Logout
+# Logout
 
-# def user_logout(request):
+def user_logout(request):
 
-#     try:
+    try:
 
-#         for key in list(request.session.keys()):
+        for key in list(request.session.keys()):
 
-#             if key == "session_key":
-#                 auth.logout(request)
-#                 continue
+            if key == "session_key":
+                auth.logout(request)
+                continue
 
-#         else:
+        else:
 
-#             del request.session[key]
+            del request.session[key]
 
-#     except KeyError:
+    except KeyError:
 
-#         pass
+        pass
     
-#     messages.success(request, "Logout success")
+    messages.success(request, "Logout success")
 
-#     return redirect("store")
+    return redirect("store")
 
 
 
-# @login_required(login_url='my-login')
-# def dashboard(request):
+@login_required(login_url='my-login')
+def dashboard(request):
     
-#     return render(request, 'account/dashboard.html')
+    return render(request, 'account/dashboard.html')
 
 
 
-# @login_required(login_url='my-login')
-# def profile_management(request):
+@login_required(login_url='my-login')
+def profile_management(request):
 
-#     # Updating our user's username and email
+    # Updating our user's username and email
 
-#     user_form = UpdateUserForm(instance=request.user)
+    user_form = UpdateUserForm(instance=request.user)
 
-#     if request.method == 'POST':
+    if request.method == 'POST':
 
-#         user_form = UpdateUserForm(request.POST, instance=request.user)
+        user_form = UpdateUserForm(request.POST, instance=request.user)
 
-#         if user_form.is_valid():
+        if user_form.is_valid():
 
-#             user_form.save()
+            user_form.save()
 
-#             messages.info(request, "Account updated")
+            messages.info(request, "Account updated")
 
-#             return redirect('dashboard')
+            return redirect('dashboard')
 
     
 
-#     context = {'user_form':user_form}
+    context = {'user_form':user_form}
 
-#     return render(request, 'account/profile-management.html', context=context)
+    return render(request, 'account/profile-management.html', context=context)
 
 
-# @login_required(login_url='my-login')
-# def delete_account(request):
+@login_required(login_url='my-login')
+def delete_account(request):
 
-#     user = User.objects.get(id=request.user.id)
+    user = User.objects.get(id=request.user.id)
 
-#     if request.method == 'POST':
+    if request.method == 'POST':
 
-#         user.delete()
+        user.delete()
 
-#         messages.error(request, "Your account deleted")
+        messages.error(request, "Your account deleted")
 
-#         return redirect('store')
+        return redirect('store')
 
-#     return render(request, 'account/delete-account.html')
+    return render(request, 'account/delete-account.html')
 
 
 # # Shipping view

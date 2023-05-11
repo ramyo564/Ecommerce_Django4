@@ -1,0 +1,85 @@
+
+{% include 'store/base.html' %}
+
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <style>
+
+        body{
+
+            background-color: gray;
+
+        }
+
+
+    </style>
+
+
+    <body>
+
+        <br>
+<!--
+        <div class = 'container bg-white shadow-md p-5 form-layout rounded' >
+            
+            <h3><center><i class="fa-solid fa-address-book "></i>&nbsp; Profile management</center>  </h3>
+     
+        </div>
+
+        <br>
+-->
+        <div class = 'container bg-white shadow-md p-5 form-layout rounded' >
+
+            <h3> Update your account </h3>
+            <hr>
+            <br>
+    
+
+            <form method="POST" autocomplate="off">
+
+                {% csrf_token %}
+
+                {{user_form.username|as_crispy_field}}
+
+                <br> <br>
+
+                {{user_form.email|as_crispy_field}}
+
+
+                <br> <br>
+                
+                <button type='submit' class='btn btn-primary btn-lg w-100 btn-block p-2 rounded'> &nbsp; Update your account</button>
+
+            </form>
+
+        </div>
+
+        <br>
+
+        <div class = 'container bg-white shadow-md p-5 form-layout rounded' >
+
+            <h3> Delete your account </h3>
+            <hr>
+
+            <p> Proceed if you wish to delete your account. </P>
+            <br>
+            <a class='btn btn-outline-danger btn-lg w-100 btn-block p-2 rounded' type="button"  href="{% url 'delete-account' %}"> Delete your account </a>
+        </div>
+
+        
+
+<br> <br>
+
+
+    </body>
+
+
+
+
+
+
+{% endblock content %}
+

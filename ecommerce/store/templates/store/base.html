@@ -102,23 +102,43 @@
             
             <ul class="navbar-nav ms-auto">
 
+                {% if user.is_authenticated %}
+
+                    <li class="nav-item">
+                
+                        <a class="btn btn-alert navbar-btn text-white" type="button"  href="{% url 'dashboard' %}">
+                            <i class="fa-regular fa-lightbulb"></i> &nbsp; Dashboard </a>
+
+                    </li>
+
+                    &nbsp; 
+                    <li class="nav-item">
+
+                        <a class="btn btn-alert navbar-btn text-white" type="button"  href="{% url 'user-logout' %}"> <i class="fa-solid fa-arrow-right-from-bracket"></i>  &nbsp; Logout </a>
+
+                    </li>
+
+                    &nbsp; &nbsp;
+
+                {% else %}
 
                 <li class="nav-item">
             
-                    <a class="btn btn-alert navbar-btn " type="button"  href="{% url 'register' %}"> Register </a>
+                    <a class="btn btn-alert navbar-btn" type="button"  href="{% url 'register' %}"> Register </a>
 
                 </li>
-                &nbsp;&nbsp;
+                &nbsp; 
 
                 <li class="nav-item">
 
-                    <a class="btn btn-alert navbar-btn " type="button"  href="/"> Login </a>
+                    <a class="btn btn-alert navbar-btn" type="button"  href="{% url 'my-login' %}"> Login </a>
 
                 </li>
 
 
-                &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp; 
 
+                {% endif %}
 
                 <li class="nav-item">
 
