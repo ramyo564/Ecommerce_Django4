@@ -118,11 +118,15 @@ def my_login(request):
             if user is not None:
 
                 auth.login(request, user)
-
+                
+                messages.success(request, "Login success")
+                
                 return redirect("dashboard")
          
 
     context = {'form':form}
+    
+    
 
     return render(request, 'account/my-login.html', context=context)
 
