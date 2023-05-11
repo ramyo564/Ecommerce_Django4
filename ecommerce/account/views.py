@@ -119,7 +119,7 @@ def my_login(request):
 
                 auth.login(request, user)
                 
-                messages.success(request, "Login success")
+                messages.success(request, "Login SUCCESS")
                 
                 return redirect("dashboard")
          
@@ -139,18 +139,18 @@ def user_logout(request):
         for key in list(request.session.keys()):
 
             if key == "session_key":
-                auth.logout(request)
+                
                 continue
 
-        else:
+            else:
 
-            del request.session[key]
+                del request.session[key]
 
     except KeyError:
 
         pass
     
-    messages.success(request, "Logout success")
+    messages.success(request, "Logout SUCCESS")
 
     return redirect("store")
 
