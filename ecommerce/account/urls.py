@@ -65,12 +65,12 @@ urlpatterns = [
 
 
 
-    # # Manager shipping url
+    # Manager shipping url
 
-    # path('manage-shipping', views.manage_shipping, name='manage-shipping'),
+    path('manage-shipping', views.manage_shipping, name='manage-shipping'),
 
 
-    # # Track orders url
-    # path('track-orders', views.track_orders, name='track-orders')
+    # Track orders url
+    path('track-orders', views.track_orders, name='track-orders'),
 
 ]
