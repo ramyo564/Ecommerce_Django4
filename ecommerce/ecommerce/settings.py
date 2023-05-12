@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'store', # Django app
     'cart', # Django app
     'account', # Django app
+    'payment', # Django app
     'mathfilters', # 숫자 계산 필터
     'crispy_forms', # register 폼 펄터
     "crispy_bootstrap4",
